@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>To my Stevie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Outfit:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: a single folded love note, one question at a time, handwritten greeting up top */
+:root{
+  --bg:#f7e4e6; --paper:#fffaf9; --ink:#3b1a2e; --soft:#8a6377; --accent:#c2365f; --tint:#f6d3da; --line:#ecc9d1;
+  --hand:"Caveat", "Segoe Print", cursive;
+  --body:"Outfit", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1e1019; --paper:#2a1723; --ink:#f8e5ec; --soft:#c49aaf; --accent:#ff6f95; --tint:#3d2030; --line:#4a2a3c; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1e1019; --paper:#2a1723; --ink:#f8e5ec; --soft:#c49aaf; --accent:#ff6f95; --tint:#3d2030; --line:#4a2a3c; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 48px;
+  background-image:radial-gradient(circle at 15% 10%, var(--tint) 0 120px, transparent 121px),radial-gradient(circle at 90% 85%, var(--tint) 0 160px, transparent 161px);
+  background-attachment:fixed}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+header{text-align:left}
+.to{font-family:var(--hand);font-size:clamp(44px,11vw,64px);line-height:1;color:var(--accent);margin:0;transform:rotate(-2deg);transform-origin:left}
+.sub{color:var(--soft);margin:10px 0 0;max-width:42ch}
+.note{background:var(--paper);border:1px solid var(--line);border-radius:6px 18px 6px 18px;padding:24px;box-shadow:0 10px 30px -18px color-mix(in srgb,var(--accent) 60%,transparent)}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;color:var(--soft);letter-spacing:.06em;text-transform:uppercase;font-variant-numeric:tabular-nums}
+.hearts{display:flex;gap:3px;flex-wrap:wrap}
+.hearts span{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.hearts span.done{background:var(--accent)}
+h2{font-size:21px;font-weight:500;margin:16px 0 18px;text-wrap:balance;line-height:1.35}
+.opts{display:grid;gap:10px}
+.opt{all:unset;box-sizing:border-box;cursor:pointer;display:block;padding:13px 16px;border:1.5px solid var(--line);border-radius:12px;background:transparent;color:var(--ink);transition:border-color .15s,background .15s,transform .15s}
+.opt:hover{border-color:var(--accent);background:var(--tint)}
+.opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opt.picked{border-color:var(--accent);background:var(--tint)}
+.nav{display:flex;justify-content:space-between;margin-top:18px}
+.link{all:unset;cursor:pointer;color:var(--soft);font-size:14px;padding:4px 2px}
+.link:hover{color:var(--accent)}
+.link:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.res-eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin:0}
+.res-big{font-family:var(--hand);font-size:clamp(40px,10vw,56px);color:var(--accent);line-height:1.05;margin:6px 0 10px}
+.res p{margin:0 0 12px}
+.bars{display:grid;gap:10px;margin:18px 0}
+.bar{display:grid;grid-template-columns:minmax(0,9.5rem) 1fr 1.5rem;align-items:center;gap:10px;font-size:14px}
+.track{height:10px;background:var(--tint);border-radius:99px;overflow:hidden}
+.fill{height:100%;background:var(--accent);border-radius:99px}
+.n{text-align:right;font-variant-numeric:tabular-nums;color:var(--soft)}
+.sign{font-family:var(--hand);font-size:28px;color:var(--ink);margin-top:8px}
+.btn{all:unset;cursor:pointer;background:var(--accent);color:var(--paper);padding:10px 18px;border-radius:99px;font-weight:500;font-size:15px}
+.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+@media (prefers-reduced-motion:no-preference){.note{animation:in .35s ease-out}@keyframes in{from{transform:translateY(6px)}to{transform:none}}}
+</style>
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <p class="to">To my Stevie,</p>
+    <p class="sub">15 little questions so I can love you the way you like it most. Be honest, pick what feels most like you.</p>
+  </header>
+  <main class="note" id="card" aria-live="polite"></main>
+</div>
+
+<script>
+const L = {
+  A:{name:"Words of affirmation", short:"Words", desc:"Hearing it matters to you. Sweet messages, “proud of you”, and saying out loud what I feel are what fill your heart."},
+  B:{name:"Quality time", short:"Quality time", desc:"You feel loved when I'm fully there with you. No phones, just us, talking or doing nothing together."},
+  C:{name:"Acts of service", short:"Acts of service", desc:"Actions speak loudest for you. When I take something off your plate or help without being asked, you feel cared for."},
+  D:{name:"Receiving gifts", short:"Gifts", desc:"Thoughtful little things mean the world to you. It's the “I saw this and thought of you” that counts, not the price."},
+  E:{name:"Physical touch", short:"Physical touch", desc:"Hugs, holding hands, sitting close. Being near me is how you feel safe and loved."}
+};
+const Q = [
+ ["After a long day, what cheers you up most?",["Hearing “proud of you da”","A long call or just chilling together","Someone handling your tasks for you","A surprise treat","A tight hug"]],
+ ["What do you find yourself complaining about the most?",["“You never appreciate me”","“No time for me”","“You never help”","“You forgot”","“You feel so distant”"]],
+ ["How do you usually say sorry?",["A long sweet message","Plan a date or a call","Fix the problem","Bring something","A hug or holding hands"]],
+ ["On my birthday, where do you put the most effort?",["The message or letter","Spending the whole day with me","Planning and handling everything","The gift","Being close to me all day"]],
+ ["When I'm sad, what do you do first?",["Say comforting things","Stay on call or come over","Try to solve it","Get my favourite snack","Hug me"]],
+ ["What makes you happiest?",["A compliment","My undivided attention","When I help you out","A small thoughtful gift","Affection"]],
+ ["What hurts you the most?",["Harsh words","Cancelled plans or me on my phone","Not keeping promises","Forgotten occasions","Me pulling away physically"]],
+ ["When we're out in public, you…",["Praise me to your friends","Stay focused only on me","Carry my bag and handle stuff","Buy me random things","Hold my hand"]],
+ ["What do you save or treasure?",["My old messages","Memories of places we went","Things I did for you","Gifts I gave you","Photos of us close together"]],
+ ["When I'm busy, what do you want?",["At least a “miss you” text","A call after","A chance to help me","Nothing much, you'd rather send me something","A hug when we meet"]],
+ ["Your texts to me are usually…",["Long and sweet","“Free ah? Call pannalama?”","“Reached? Ate?” type caring","“Saw this, thought of you”","“Miss holding you”"]],
+ ["When you're stressed, you need…",["Reassurance","Company","Some load taken off","A little cheer-up thing","Physical comfort"]],
+ ["Your ideal date is…",["Deep talks","A full day together, no phones","Me planning everything for you","Exchanging little surprises","A cozy movie, cuddled up"]],
+ ["What do you do without being asked?",["Compliment me","Make time for me","Help me","Bring me things","Hug me, hold me"]],
+ ["If you could pick only one?",["“I love you” said beautifully","One uninterrupted day together","Me taking care of your work","A meaningful gift","A long hug"]]
+];
+const keys=["A","B","C","D","E"];
+let i=0, ans=Array(Q.length).fill(null);
+const card=document.getElementById("card");
+
+function render(){
+  if(i>=Q.length) return result();
+  const [q,opts]=Q[i];
+  card.innerHTML=`
+    <div class="meta"><span>Question ${i+1} of ${Q.length}</span>
+      <div class="hearts" aria-hidden="true">${Q.map((_,k)=>`<span class="${ans[k]?'done':''}"></span>`).join("")}</div></div>
+    <h2>${q}</h2>
+    <div class="opts">${opts.map((o,k)=>`<button class="opt ${ans[i]===keys[k]?'picked':''}" id="opt-${k}" data-k="${keys[k]}">${o}</button>`).join("")}</div>
+    <div class="nav"><button class="link" id="back" ${i===0?'hidden':''}>← Back</button><span></span></div>`;
+  card.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ans[i]=b.dataset.k;b.classList.add("picked");setTimeout(()=>{i++;render()},180)});
+  const bk=document.getElementById("back"); if(bk) bk.onclick=()=>{i--;render()};
+}
+
+function result(){
+  const c={A:0,B:0,C:0,D:0,E:0}; ans.forEach(a=>a&&c[a]++);
+  const sorted=keys.slice().sort((a,b)=>c[b]-c[a]);
+  const top=sorted[0], second=sorted[1];
+  const ties=keys.filter(k=>c[k]===c[top]);
+  const headline = ties.length>1 ? ties.map(k=>L[k].short).join(" & ") : L[top].name;
+  card.innerHTML=`
+    <div class="res">
+      <p class="res-eyebrow">Your love language is</p>
+      <p class="res-big">${headline}</p>
+      <p>${ties.length>1 ? ties.map(k=>L[k].desc).join(" ") : L[top].desc}</p>
+      ${ties.length===1 && c[second]>0 ? `<p>Close second: <strong>${L[second].name}</strong>.</p>`:""}
+      <div class="bars">${sorted.map(k=>`<div class="bar"><span>${L[k].short}</span><div class="track"><div class="fill" style="width:${c[k]/Q.length*100}%"></div></div><span class="n">${c[k]}</span></div>`).join("")}</div>
+      <p>Now screenshot this and send it to me. I'm taking notes 😌</p>
+      <p class="sign">Love you, always.</p>
+      <div class="nav"><button class="btn" id="again">Take it again</button></div>
+    </div>`;
+  document.getElementById("again").onclick=()=>{i=0;ans.fill(null);render()};
+}
+render();
+</script>
+</body>
+</html>
